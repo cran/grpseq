@@ -1,0 +1,15 @@
+58a0f82cfc8d1771e4e9353b08e53ecc *DESCRIPTION
+4e507722c0ca51ef0d4cd8bfe1ee28ae *NAMESPACE
+1b4068472a99e60adf17891aa650462a *R/functions.R
+1089e40c15f8a4d31ee55ac3bb23c444 *R/generic.R
+95fb3161ce5549c6948def3337ea44c6 *build/vignette.rds
+e1d6be3602e3dd6dc7190a05a7ff3061 *inst/doc/futility_design.R
+44f4c8c5ab4698a7ef8cee79c05cea26 *inst/doc/futility_design.Rmd
+9dc401ec2412ab53bb57be40dae84d71 *inst/doc/futility_design.html
+c0492d715ca147f5e75e7de47b7502f2 *man/fut.Rd
+1e90612437d07ae5e4e608c304266faf *man/plot.fut.Rd
+6f897451297b74bfc290c8c6bcf2ffa2 *man/powerplot.Rd
+22ef8b01208b4704b2204d39a93d5e1f *man/print.fut.Rd
+953a0b00b600b129490c96d57996c238 *man/print.summary.fut.Rd
+4d23010fce1d0c5739767a3341101761 *man/summary.fut.Rd
+44f4c8c5ab4698a7ef8cee79c05cea26 *vignettes/futility_design.Rmd

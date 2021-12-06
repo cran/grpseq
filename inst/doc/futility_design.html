@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Lu Mao (lmao@biostat.wisc.edu)" />
+
+
+<title>Design of nonbinding futility analysis in clinical trials</title>
+
+<script src="data:application/javascript;base64,Ly8gUGFuZG9jIDIuOSBhZGRzIGF0dHJpYnV0ZXMgb24gYm90aCBoZWFkZXIgYW5kIGRpdi4gV2UgcmVtb3ZlIHRoZSBmb3JtZXIgKHRvCi8vIGJlIGNvbXBhdGlibGUgd2l0aCB0aGUgYmVoYXZpb3Igb2YgUGFuZG9jIDwgMi44KS4KZG9jdW1lbnQuYWRkRXZlbnRMaXN0ZW5lcignRE9NQ29udGVudExvYWRlZCcsIGZ1bmN0aW9uKGUpIHsKICB2YXIgaHMgPSBkb2N1bWVudC5xdWVyeVNlbGVjdG9yQWxsKCJkaXYuc2VjdGlvbltjbGFzcyo9J2xldmVsJ10gPiA6Zmlyc3QtY2hpbGQiKTsKICB2YXIgaSwgaCwgYTsKICBmb3IgKGkgPSAwOyBpIDwgaHMubGVuZ3RoOyBpKyspIHsKICAgIGggPSBoc1tpXTsKICAgIGlmICghL15oWzEtNl0kL2kudGVzdChoLnRhZ05hbWUpKSBjb250aW51ZTsgIC8vIGl0IHNob3VsZCBiZSBhIGhlYWRlciBoMS1oNgogICAgYSA9IGguYXR0cmlidXRlczsKICAgIHdoaWxlIChhLmxlbmd0aCA+IDApIGgucmVtb3ZlQXR0cmlidXRlKGFbMF0ubmFtZSk7CiAgfQp9KTsK"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">
+  code {
+    white-space: pre;
+  }
+  .sourceCode {
+    overflow: visible;
+  }
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<link rel="stylesheet" href="data:text/css,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0A%7D%0Apre%20%7B%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200px%2010px%200px%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Monaco%2C%20%27Courier%20New%27%2C%20monospace%3B%0Afont%2Dsize%3A%2085%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200px%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0Abackground%2Dcolor%3A%20%23FFFFFF%3B%0Apadding%3A%202px%3B%0Aborder%3A%201px%20solid%20%23DDDDDD%3B%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2035px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20145%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" type="text/css" />
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Design of nonbinding futility analysis in clinical trials</h1>
+<h4 class="author">Lu Mao (<a href="mailto:lmao@biostat.wisc.edu" class="email">lmao@biostat.wisc.edu</a>)</h4>
+
+
+
+<div id="introduction" class="section level2">
+<h2>INTRODUCTION</h2>
+<p>This vignette demonstrates the use of the <code>grpseq</code> package in the design of nonbinding futility analysis in clinical trials (Gallo, Mao, and Shih, 2014, <em>Journal of Biopharmaceutical Statistics</em>).</p>
+<div id="basics-of-group-sequential-trials" class="section level3">
+<h3>Basics of group sequential trials</h3>
+<p>Suppose a trial aims to enroll <span class="math inline">\(n\)</span> patients over time. As patients accrue, one may use the partial cohort to gauge the prospect of achieving positive result on the full cohort. Should the interim results be exceptionally promising or unpromising, one may be obliged by ethical and financial reasons to terminate the trial early, for efficacy or futility, respectively.</p>
+<div id="b-values" class="section level4">
+<h4>B-values</h4>
+<p>Superimposing early termination rules on a trial planned for a single analysis will generally alter its type I error rate and power. To control the operating characteristics of the sequential tests, we need to evaluate not only the distribution of the final test statistic but also its joint distribution with the interim ones. Formulating these statistics in terms of the “B-value” simplifies this evaluation (Lan and Wittes, 1988).</p>
+<p>Consider testing <span class="math inline">\(H_0: \theta=0\)</span> against <span class="math inline">\(H_A: \theta&gt;0\)</span>, where <span class="math inline">\(\theta\)</span> is some (standardized) metric of effect size, such as the mean difference between treatment and control (in units of standard deviation). Given a sample of size <span class="math inline">\(n\)</span>, let the test statistic be <span class="math inline">\(Z_n=\sqrt n T_n\)</span>, where <span class="math inline">\(T_n\)</span> is an estimator for <span class="math inline">\(\theta\)</span>, e.g., a standardized sample average. This typically leads to <span class="math inline">\(Z_n\sim N(\sqrt n\theta, 1)\)</span>, which implies that <span class="math inline">\(Z_n\sim N(0, 1)\)</span> under <span class="math inline">\(H_0\)</span>. In that sense, <span class="math inline">\(h=\sqrt n\theta\)</span> can be viewed as the “noncentrality parameter” of the test statistic, or “local alternative” under <span class="math inline">\(H_A\)</span>.</p>
+<p>Suppose that we plan to perform <span class="math inline">\(K-1\)</span> interim analyses when the cohort size reaches <span class="math inline">\(n_1&lt;\cdots&lt;n_{K-1}\)</span> (where <span class="math inline">\(n_{K-1}&lt;n\)</span>). Along with the final analysis at <span class="math inline">\(n_K:=n\)</span>, the operating characteristics are determined by the joint distribution of <span class="math inline">\((Z_{n_1},\ldots, Z_{n_{K}})^{\rm T}\)</span> under <span class="math inline">\(H_0\)</span> and <span class="math inline">\(H_A\)</span>. To derive it, we re-scale the <span class="math inline">\(Z_{n_k}\)</span> into the <span class="math inline">\(B\)</span>-statistics by <span class="math inline">\(B(t_k)=\sqrt{t_k}Z_{n_k}\)</span>, where <span class="math inline">\(t_k=n_k/n\)</span> is the “information time” at the <span class="math inline">\(k\)</span>th look (sample size is proportional to statistical information). Under large samples, the test statistic usually behaves like a sample average, that is, <span class="math inline">\(Z_{n_k}\approx\sqrt{n_k}\theta+n_k^{-1/2}\sum_{i=1}^{n_k}X_i\)</span> for some mean-zero <span class="math inline">\(X_i\)</span> with <span class="math inline">\(E(X_i^2)=1\)</span> and <span class="math inline">\(E(X_iX_j)=0\)</span> for <span class="math inline">\(i\neq j\)</span>. This means that <span class="math inline">\(B(t_k)\approx ht_k+n^{-1/2}\sum_{i=1}^{n_k}X_i\)</span>, which clearly has independent increments in the sense that <span class="math inline">\(B(t)\perp \{B(s)-B(t)\}\)</span> for <span class="math inline">\(s&gt;t\)</span>. In fact, by the multivariate central limit theorem, <span class="math display">\[\begin{equation}\tag{1}
+\left(\begin{array}{c}B(t_1)\\B(t_2)\\\vdots\\B(t_{K-1})\\B(1)\end{array}\right)
+\sim N \left\{
+h\left(\begin{array}{ccccc}t_1\\t_2\\\vdots\\t_{K-1}\\1\end{array}\right),
+\left(\begin{array}{c}t_1&amp; t_1&amp;\ldots&amp; t_1&amp;t_1 \\
+t_1&amp; t_2&amp;\ldots&amp; t_2&amp;t_2\\
+\vdots&amp;\vdots&amp;\vdots&amp;\vdots&amp;\vdots\\
+t_1&amp; t_2 &amp; \cdots &amp; t_{K-1}&amp;  t_{K-1}\\
+t_1&amp; t_2 &amp; \cdots &amp; t_{K-1}&amp;  1
+\end{array}\right)
+\right\}.
+\end{equation}\]</span> Therefore, the left hand side can be viewed discrete evaluations of a continuous-time Brownian motion <span class="math inline">\(B(t)\)</span> satisfying <span class="math inline">\({\rm cov}\{B(t),B(s)\}=\min(t, s)\)</span> and with drift term <span class="math inline">\(E\{B(t)\}=ht\)</span>.</p>
+</div>
+<div id="conditional-power-and-predictive-power" class="section level4">
+<h4>Conditional power and predictive power</h4>
+<p>For a one-off analysis of the full cohort, we reject <span class="math inline">\(H_0:\theta=0\)</span> if <span class="math inline">\(|B(1)|&gt;z_{1-\alpha/2}\)</span>, where <span class="math inline">\(\alpha\)</span> is the type I error and <span class="math inline">\(z_{1-\alpha/2}=\Phi^{-1}(1-\alpha/2)\)</span>, and <span class="math inline">\(\Phi(\cdot)\)</span> is the cumulative distribution function of the standard normal distribution. At <span class="math inline">\(\theta&gt;0\)</span>, or rather, <span class="math inline">\(h=\sqrt n\theta&gt;0\)</span>, the power of the test is approximately <span class="math inline">\(P\{B(1)&gt; z_{1-\alpha/2}\mid h\}=\Phi(h-z_{1-\alpha/2})\)</span> (since <span class="math inline">\(P\{B(1)&lt; -z_{1-\alpha/2}\mid h\}\approx 0\)</span> for any moderately sized <span class="math inline">\(h&gt;0\)</span>) so that <span class="math inline">\(h=z_{1-\alpha/2}+z_{1-\beta}\)</span> if the target power is <span class="math inline">\(1-\beta\)</span>.</p>
+<p>At information time <span class="math inline">\(t_k\)</span>, we have that <span class="math inline">\(B(t)\mid \{B(t)=b\}\sim N\{b+h(1-t), 1-t\}\)</span> by (1), so the <em>conditional power</em> (CP) is <span class="math display">\[\begin{equation}\tag{2}
+P\{B(1) &gt; z_{1-\alpha/2} \mid B(t)=b; h\}=\Phi\left(\frac{b+h(1-t)-z_{1-\alpha/2}}{\sqrt{1-t}}\right).
+\end{equation}\]</span> Replacing <span class="math inline">\(h\)</span> with <span class="math inline">\(z_{1-\alpha/2}+z_{1-\beta}\)</span> establishes the conditional power as a function of the target power.</p>
+<p>The left hand side of (2) is evaluated under a pre-specified local alternative, which may no longer be tenable in light of the data accrued by time <span class="math inline">\(t\)</span>. A more data-adaptive approach substitutes <span class="math inline">\(h\)</span> for its estimator <span class="math inline">\(\hat h_t=t^{-1}B(t)\)</span> (since <span class="math inline">\(E\{B(t)\}=ht\)</span>). That leads to the <em>conditional power under the current estimate</em> (CPd): <span class="math display">\[\begin{equation}\tag{3}
+P\{B(1) &gt; z_{1-\alpha/2} \mid B(t)=b; \hat h_t\}=\Phi\left(\frac{t^{-1}b-z_{1-\alpha/2}}{\sqrt{1-t}}\right).
+\end{equation}\]</span> This nonetheless has the limitation of treating <span class="math inline">\(\hat h_t\)</span> as if it were fixed. To account for its randomness, we can average the left hand side of (2) over the its posterior distribution given <span class="math inline">\(B(t)\)</span>. Because <span class="math inline">\(B(t)\mid h \sim N(ht, t)\)</span>, we easily obtain that <span class="math inline">\(h\mid \{B(t)=b\}\sim N(t^{-1}b, t^{-1})\)</span> under an improper flat prior for <span class="math inline">\(h\)</span>. This leads to the <em>predictive power</em> (PP) <span class="math display">\[\begin{equation}\tag{4}
+P\{B(1) &gt; z_{1-\alpha/2} \mid B(t)=b\}=\Phi\left(\frac{b-tz_{1-\alpha/2}}{\sqrt{t(1-t)}}\right).
+\end{equation}\]</span></p>
+</div>
+</div>
+<div id="nonbinding-futility-analysis" class="section level3">
+<h3>Nonbinding futility analysis</h3>
+<p>In a futility design, we stop the trial to accept <span class="math inline">\(H_0\)</span> when the CP, CPd, or PP drops below a certain threshold, indicating slim chance of rejecting it eventually. The corresponding bound for the B-value can be obtained by solving (2), (3), or (4) for <span class="math inline">\(b\)</span> (and thus the z-value by <span class="math inline">\(z=b/\sqrt t\)</span>) at each information time. Obviously, adding futility rules increases the change of accepting <span class="math inline">\(H_0\)</span>, thereby shrinking both the type I error and power. To “use up” the nominal type I error so as to recoup power, one can lower the critical value <span class="math inline">\(z_{1-\alpha}\)</span> to make rejection easier (and perhaps re-evaluating (2)–(4) iteratively to get the precise amount of decrease). But this would make the futility rules <em>binding</em> — failing to stop when the boundaries are crossed leads to inflated type I error. It is thus more popular to maintain the critical value and either to inflate the sample size to recoup power (recall that <span class="math inline">\(\sqrt n\theta=h=z_{1-\alpha/2}+z_{1-\beta}\)</span>) or to evaluate the power loss and see if it is acceptable. This allows us to treat futility boundaries as nonbinding guidelines rather than rigid rules.</p>
+<p>Let <span class="math inline">\(b_k\)</span> denote the futility bound for the <span class="math inline">\(B\)</span>-statistic at <span class="math inline">\(t_k\)</span> <span class="math inline">\((k=1,\ldots, K-1)\)</span>. Then the power lost by enforcing this bound is the probability of accepting <span class="math inline">\(H_0\)</span> at <span class="math inline">\(t_k\)</span> while the final analysis could have rejected it, namely, <span class="math display">\[\psi(t_k)=P\{B(t_1)\geq b_1,\ldots, B(t_{k-1})\geq b_{k-1}, B(t_k)&lt;b_k, B(1)&gt;z_{1-\alpha/2} \mid h\},\]</span> which can be evaluated based on the multivariate normal distribution in (1). The total power loss is thus <span class="math inline">\(\sum_{k=1}^{K-1}\psi(t_k)\)</span>. Alternatively, we can assess the “beta” (type II error) spent at each look by evaluating <span class="math inline">\(P\{\mbox{accepting }H_0\mbox{ at }t_k\mid h\}\)</span> along similar lines.</p>
+<p>Another important metric for the quality of the futility boundaries is the expected sample size under <span class="math inline">\(H_0\)</span>. The smaller the sample size, the less costly (in both financial or ethical terms) the trial. By similar logic to the calculation of power loss and beta spent, we can calculate the expected sample size as a fraction of the original sample size by <span class="math inline">\(\sum_{k=1}^{K} t_kP\{\mbox{stopping at }t_k\mid h=0\}\)</span>. With sample size inflation, simply multiply it by the inflation factor.</p>
+</div>
+</div>
+<div id="basic-syntax-and-example" class="section level2">
+<h2>BASIC SYNTAX AND EXAMPLE</h2>
+<p>The main function for planning nonbinding futility analysis is <code>fut()</code>. Its basic syntax is of the form</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>obj <span class="ot">&lt;-</span> <span class="fu">fut</span>(alpha, beta, t, gamma, <span class="at">side =</span> <span class="dv">2</span>, <span class="at">si =</span> <span class="dv">0</span>, <span class="at">scale =</span> <span class="st">&quot;CP&quot;</span>)</span></code></pre></div>
+<p>In the above, <code>alpha</code> and <code>beta</code> are the target type I and II errors, respectively, <code>t</code> is a vector of information times for the futility looks, <code>gamma</code> is the corresponding vector of specified CP, CPd, or PP when <code>scale = &quot;CP&quot;</code>, <code>&quot;CPd&quot;</code>, and <code>&quot;PP&quot;</code>, respectively, <code>side</code> specifies whether the test is one- or two-sided, and <code>si = 1</code> if one wants to inflate sample size to recoup power (<code>si = 0</code> to leave it as it is). Summary information of the planned analysis can be printed out by</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj)</span></code></pre></div>
+<p>The printout includes the calculated <span class="math inline">\(B\)</span>- and <span class="math inline">\(z\)</span>-values, beta spent, and power loss (if <code>si=0</code>) at each of the specified information times along with the expected sample size under <span class="math inline">\(H_0\)</span> and the sample size inflation factor (if <code>si=1</code>). Using the <code>plot()</code> and <code>powerplot()</code> functions on <code>obj</code> plots the futility bounds (in terms B- or z-values) and the power curve of the planned analysis as a function of the local effect size (in units of the hypothesized effect size), respectively.</p>
+<p>For example, consider a two-sided test with type I error 0.05 and power 0.8, and suppose that we want to impose three futility looks at information times 0.25, 0.50, and 0.75. We want to set the futility bounds to correspond to 20% PP. That is, we drop the trial for futility if the PP dips below 20% when the patient cohort reaches a quarter, half, and three quarters of the target size. First, we take the sample size inflation approach to avoid losing power:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="do">## load the package</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(grpseq)</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="do">## two-sided level 0.05 test with 80% power;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="do">## evenly spaced three futility looks with predictive power 20%;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="do">## inflate sample size to recoup power.</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>obj1 <span class="ot">&lt;-</span> <span class="fu">fut</span>(<span class="at">alpha=</span><span class="fl">0.05</span>,<span class="at">beta=</span><span class="fl">0.2</span>,<span class="at">t=</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)<span class="sc">/</span><span class="dv">4</span>,<span class="at">gamma=</span><span class="fl">0.2</span><span class="sc">*</span><span class="fu">rep</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="at">side=</span><span class="dv">2</span>,<span class="at">scale=</span><span class="st">&quot;PP&quot;</span>,<span class="at">si=</span><span class="dv">1</span>)</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>obj1</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; fut(alpha = 0.05, beta = 0.2, t = (1:3)/4, gamma = 0.2 * rep(1, </span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     3), side = 2, si = 1, scale = &quot;PP&quot;)</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sample Size inflation factor: 1.156737</span></span></code></pre></div>
+<p>This tells us that we need to inflate the sample size by 1.16 to restore the 80% power. Now, consider the same set-up without sample size inflation.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="do">## do the same thing without sample size inflation</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>obj2 <span class="ot">&lt;-</span> <span class="fu">fut</span>(<span class="at">alpha=</span><span class="fl">0.05</span>,<span class="at">beta=</span><span class="fl">0.2</span>,<span class="at">t=</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>)<span class="sc">/</span><span class="dv">4</span>,<span class="at">gamma=</span><span class="fl">0.2</span><span class="sc">*</span><span class="fu">rep</span>(<span class="dv">1</span>,<span class="dv">3</span>),<span class="at">side=</span><span class="dv">2</span>,<span class="at">scale=</span><span class="st">&quot;PP&quot;</span>,<span class="at">si=</span><span class="dv">0</span>)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>obj2</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; fut(alpha = 0.05, beta = 0.2, t = (1:3)/4, gamma = 0.2 * rep(1, </span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     3), side = 2, si = 0, scale = &quot;PP&quot;)</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Power loss due to futility rules: 0.09388177 (planned power: 0.8).</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="do">## print the summary results</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(obj2)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Call:</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; fut(alpha = 0.05, beta = 0.2, t = (1:3)/4, gamma = 0.2 * rep(1, </span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;     3), side = 2, si = 0, scale = &quot;PP&quot;)</span></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sample Size inflation factor: 1</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Nominal type I error = 0.05, Power loss = 0.0939 (Planned power: 0.8),</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Side = 2</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;            Interim 1 Interim 2 Interim 3 Final</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Info Time     0.2500    0.5000    0.7500  1.00</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; PP            0.2000    0.2000    0.2000    NA</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; B-Value       0.1256    0.5592    1.1055  1.96</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Z-value       0.2511    0.7908    1.2766  1.96</span></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Beta spent    0.1251    0.0568    0.0421  0.07</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Power Loss    0.0638    0.0208    0.0093    NA</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sample size distribution under H_0:</span></span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; (as a ratio to that of the reference test)</span></span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Expected sample size: 0.4124 </span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; </span></span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt;             Interim 1 Interim 2 Interim 3 Final</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Sample Size    0.2500    0.5000    0.7500 1.000</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; Probability    0.5991    0.2253    0.1026 0.073</span></span></code></pre></div>
+<p>We can see that the imposed futility looks take away 9.4% power from the target 80%. On the other hand, they cut the expected sample size by 1-41.2%=58.8% under <span class="math inline">\(H_0\)</span>. The listed boundaries for the B- and z-values can be plotted by</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>oldpar <span class="ot">&lt;-</span> <span class="fu">par</span>(<span class="at">mfrow =</span> <span class="fu">par</span>(<span class="st">&quot;mfrow&quot;</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(<span class="at">mfrow=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>))</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="do">## plot the futility boundaries by z-value</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(obj2,<span class="at">scale=</span><span class="st">&#39;z&#39;</span>,<span class="at">lwd=</span><span class="dv">2</span>,<span class="at">main=</span><span class="st">&quot;&quot;</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="do">## plot the futility boundaries by B-value</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(obj2,<span class="at">scale=</span><span class="st">&#39;b&#39;</span>,<span class="at">lwd=</span><span class="dv">2</span>,<span class="at">main=</span><span class="st">&quot;&quot;</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">par</span>(oldpar)</span></code></pre></div>
+<p>Finally, we plot the power curve of the planned futility analysis with reference to that of the original test.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="do">## plot the power curve as a function of the (local)</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="do">## effect size in units of the hypothesized effect size</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="do">## ref=TRUE requests the power curve for the original one-time analysis</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="fu">powerplot</span>(obj2,<span class="at">lwd=</span><span class="dv">2</span>, <span class="at">ref=</span><span class="cn">TRUE</span>)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --> The difference between the solid and dashed lines at <span class="math inline">\(\delta=1\)</span> reflects the 9.4% power loss due to the futility looks.</p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ul>
+<li><p>Gallo, P., Mao, L., and Shih, V.H. (2014). Alternative views on setting clinical trial futility criteria.<br />
+<em>Journal of Biopharmaceutical Statistics</em>, 24, 976-993. <a href="https://doi.org/10.1080/10543406.2014.932285" class="uri">https://doi.org/10.1080/10543406.2014.932285</a>.</p></li>
+<li><p>Lan, K. G. and Wittes, J. (1988). The B-value: a tool for monitoring data. <em>Biometrics</em>, 579-585.</p></li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
